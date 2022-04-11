@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "f9773f30-abb8-4de0-9985-2b4e593d7971",
+		"name": "Dynamics Login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable('access_token',jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{clientid}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "{{url}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{clientsecret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{authurl}}",
+					"host": [
+						"{{authurl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query example - Accounts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Prefer",
+						"value": "odata.track-changes",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{webapiurl}}accounts?$select=name, address1_line1,  address1_line2, address1_line3, address1_postalcode, address1_city&$top=3",
+					"host": [
+						"{{webapiurl}}accounts"
+					],
+					"query": [
+						{
+							"key": "$select",
+							"value": "name, address1_line1,  address1_line2, address1_line3, address1_postalcode, address1_city"
+						},
+						{
+							"key": "$top",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
